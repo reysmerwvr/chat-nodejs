@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Chat Node.js
+        </title>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+        <style type="text/css">
+            #chat {
+                position: relative;
+                width : 100%;
+                float :left;
+                min-height:100%;
+                height: 80%;
+                overflow:auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-header">
+                <h2>Chat NodeJS <small>Developed by <a href="https://github.com/reysmerwvr" target="_blank">Reysmer Valle</a></small></h2>
+            </div>
+            <div class="row" id="content" style="height:70%">
+                <div class="col-md-2"></div>
+                <div class="col-md-6"  id="chatContent">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            Chat
+                        </div>
+                        <div class="panel-body" id="chat">
+                                
+                        </div>
+                    </div>
+                    <div>
+                        <form class="input-group" id="sendMessage">
+                            <input type="text" class="form-control input-lg" id="message" style="margin:0 auto;" placeholder="Mensaje">
+                            <span class="input-group-btn">
+                                 <button type="submit" class="btn btn-lg btn-primary">Enviar</button>
+                            </span> 
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript">
+            jQuery(function($){
+                var socket = io.connect();
+                var $messageForm = $('#sendMessage');
+                var $message = $('#message');
+                var $chat = $('#chat');
+                
+                $messageForm.submit(function(e){
+                    e.preventDefault();
+                    if($message.val()!='')
+                        socket.emit("sendMessage", $message.val());
+                    $message.val('');
+                });
+                
+                socket.on('newMessage',function(data) {
+                    $chat.append(' - '+ data.msg + "<br/>");
+                });
+            });
+        </script>
+        
+    </body>
+</html>
