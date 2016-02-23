@@ -11,12 +11,19 @@
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
+        <!-- jQuery -->
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-        
         <style type="text/css">
+            #content{
+                display: none;
+            }
+            #chatContent{
+                float: left;
+            }
             #chat {
                 position: relative;
                 width : 100%;
@@ -32,6 +39,19 @@
             <div class="page-header">
                 <h2>Chat NodeJS <small>Developed by <a href="https://github.com/reysmerwvr" target="_blank">Reysmer Valle</a></small></h2>
             </div>
+            
+            <div class="input-group" style="text-align:center; margin:0 auto;" id="nickContainer">
+                <input type="text" class="form-control input-lg" id="nickname" style="margin:0 auto;" placeholder="Nickname">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-lg btn-primary" id="setNick">Iniciar</button>
+                </span> 
+            </div>
+            
+            <div class="alert alert-danger alert-dismissible fade in" role="alert" id="login-error" style="display:none;">
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="closeAlert"><span aria-hidden="true">&times;</span></button>
+                <strong>Alerta!</strong> Este nombre de usuario ya existe. Intente nuevamente.
+            </div>
+            
             <div class="row" id="content" style="height:70%">
                 <div class="col-md-2"></div>
                 <div class="col-md-6"  id="chatContent">
@@ -52,27 +72,62 @@
                         </form>
                     </div>
                 </div>
+                <div class="col-md-2">
+                     <div class="panel panel-info">
+                        <div class="panel-heading">
+                            USERS
+                        </div>
+                        <div class="panel-body" id="users">
+                                
+                        </div>
+                     </div>
+                </div>
             </div>
         </div>
         
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript">
-            jQuery(function($){
+            $(function(){
                 var socket = io.connect();
-                var $messageForm = $('#sendMessage');
-                var $message = $('#message');
-                var $chat = $('#chat');
+                var messageForm = $('#sendMessage');
+                var message = $('#message');
+                var chat = $('#chat');
                 
-                $messageForm.submit(function(e){
+                var nickname = $('#nickname');
+                var setNick = $('#setNick');
+                var users = $('#users');
+                
+                setNick.click(function(e){
                     e.preventDefault();
-                    if($message.val()!='')
-                        socket.emit("sendMessage", $message.val());
-                    $message.val('');
+                    socket.emit("newUser", nickname.val(), function(data){
+                        if(data){
+                            $('#nickContainer').hide();
+                            $('#content').show();
+                        }else{
+                            $('#login-error').show();
+                        }
+                    });
+                });
+                
+                messageForm.submit(function(e){
+                    e.preventDefault();
+                    if(message.val()!='')
+                        socket.emit("sendMessage", message.val());
+                    message.val('');
                 });
                 
                 socket.on('newMessage',function(data) {
-                    $chat.append(' - '+ data.msg + "<br/>");
+                    chat.append(data.nick +' : '+ data.msg + "<br/>");
                 });
+                
+                socket.on('usernames', function(data) {
+                    var usernamesString = '';
+                    for (var username in data){
+                        usernamesString += username + "<br/>"
+                    }
+                    users.html(usernamesString);
+                });
+                
             });
         </script>
         
