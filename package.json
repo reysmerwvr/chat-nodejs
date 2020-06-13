@@ -4,14 +4,14 @@
   "description": "A chat example to showcase how to use `socket.io` with a static `express` server with `async` for control flow.",
   "main": "app.js",
   "repository": {
-    "type" : "git",
-    "url" : "git@github.com:reysmerwvr/chat_nodejs.git"
+    "type": "git",
+    "url": "git@github.com:reysmerwvr/chat_nodejs.git"
   },
   "license": "ISC",
   "author": "Reysmer Valle <reysmerwvr@gmail.com>",
   "dependencies": {
     "async": "~0.2.8",
-    "express": "~3.2.4",
-    "socket.io": "~0.9.14"
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
   }
 }
