@@ -10,7 +10,7 @@
   "license": "ISC",
   "author": "Reysmer Valle <reysmerwvr@gmail.com>",
   "dependencies": {
-    "async": "~0.2.8",
+    "async": "~2.6.4",
     "express": "^4.17.1",
     "socket.io": "^2.4.0"
   }
