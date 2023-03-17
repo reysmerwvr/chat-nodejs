@@ -12,6 +12,6 @@
   "dependencies": {
     "async": "~2.6.4",
     "express": "^4.17.3",
-    "socket.io": "^2.4.0"
+    "socket.io": "^2.5.0"
   }
 }
