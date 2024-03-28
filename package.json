@@ -11,7 +11,7 @@
   "author": "Reysmer Valle <reysmerwvr@gmail.com>",
   "dependencies": {
     "async": "~2.6.4",
-    "express": "^4.17.3",
+    "express": "^4.19.2",
     "socket.io": "^2.5.0"
   }
 }
